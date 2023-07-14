@@ -75,7 +75,8 @@ except URLError as e:
 streamlit.header("The fruit load list contains:")
 # Snowflake related functions 
 def get_fruit_load_list():
-  with my_cnx_cursor() as my_cur:
+  my_cur = my_cnx_cursor()
+  with my_cur:
     my_cur.execute("SELECT * FROM fruit_load_list")
     return my_cur.fetchall()
     
