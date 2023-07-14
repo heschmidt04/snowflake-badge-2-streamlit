@@ -54,6 +54,9 @@ except URLError as e:
 ## Format the data into a table with columns 
 # streamlit.dataframe(fruityvice_normalized)
 
+# Add a processing break here 
+streamlit.stop()
+
 # import snowflake.connector
 # Set up Snowflake connection 
 my_cnx = snowflake.connector.connect(**streamlit.secrets["snowflake"])
