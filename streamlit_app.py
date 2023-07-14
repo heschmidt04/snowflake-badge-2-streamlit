@@ -31,13 +31,28 @@ streamlit.dataframe(fruits_to_show)
 
 # New Section to display fruitvice API response 
 streamlit.header("Fruityvice Fruit Advice!")
-fruit_choice = streamlit.text_input('What fruit would you like information about?','Kiwi')
-streamlit.write('The user entered ', fruit_choice)
+try: 
+  fruit_choice = streamlit.text_input('What fruit would you like information about?','Kiwi')
+  # Replacing write to screen with a try catch block 
+  # streamlit.write('The user entered ', fruit_choice)
+  if not fruit_choice:
+      streamlit.error("Please select a fruit to get information.")
+  else:
+      # import requests
+      fruityvice_response = requests.get("https://fruityvice.com/api/fruit/" + fruit_choice)
+      fruityvice_normalized = pandas.json_normalize(fruityvice_response.json())
+      streamlit.dataframe(fruityvice_normalized)
 
-# import requests
-fruityvice_response = requests.get("https://fruityvice.com/api/fruit/" + fruit_choice)
+except URLError as e:
+  streamlit.error()
+
 # For testing to get text output 
 # streamlit.text(fruityvice_response.json())
+
+## Using Pandas read the JSON into a dataframe table using streamlit
+# fruityvice_normalized = pandas.json_normalize(fruityvice_response.json())
+## Format the data into a table with columns 
+# streamlit.dataframe(fruityvice_normalized)
 
 # import snowflake.connector
 # Set up Snowflake connection 
@@ -50,7 +65,4 @@ my_data_rows = my_cur.fetchall()
 streamlit.header("The fruit load list contains:")
 streamlit.dataframe(my_data_rows)
 
-# Using Pandas read the JSON into a dataframe table using streamlit
-fruityvice_normalized = pandas.json_normalize(fruityvice_response.json())
-# Format the data into a table with columns 
-streamlit.dataframe(fruityvice_normalized)
+
